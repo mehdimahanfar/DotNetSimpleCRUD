@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TaskManager.Data;
 
@@ -11,9 +12,11 @@ using TaskManager.Data;
 namespace TaskManager.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240509132719_Add Branch Entity")]
+    partial class AddBranchEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -215,9 +218,6 @@ namespace TaskManager.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<long?>("BranchId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -271,8 +271,6 @@ namespace TaskManager.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BranchId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -343,15 +341,6 @@ namespace TaskManager.Migrations
                         .HasForeignKey("ParentId");
 
                     b.Navigation("Parent");
-                });
-
-            modelBuilder.Entity("TaskManager.Entity.Identity.ApplicationUser", b =>
-                {
-                    b.HasOne("TaskManager.Entity.Foundation.Branch", "Branch")
-                        .WithMany()
-                        .HasForeignKey("BranchId");
-
-                    b.Navigation("Branch");
                 });
 #pragma warning restore 612, 618
         }
