@@ -1,7 +1,9 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TaskManager.Data;
 using TaskManager.Entity.Identity;
+using TaskManager.Profile;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,11 +12,28 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
                        throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+// builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+     // .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddRoleManager<RoleManager<ApplicationRole>>()
+    .AddUserManager<UserManager<ApplicationUser>>()
+    .AddDefaultTokenProviders()
+    ;
+
+builder.Services.AddRazorPages();
+
+builder.Services.AddSingleton(new MapperConfiguration(cfg => 
+{
+    cfg.AddProfile<MappingProfile>();
+}).CreateMapper());
+    
+// builder.Services.AddAutoMapper(typeof(StartupBase));
 
 var app = builder.Build();
 
@@ -35,6 +54,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

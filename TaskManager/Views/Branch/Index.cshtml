@@ -1,0 +1,50 @@
+@model object
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="" asp-controller="Branch" id="EntityForm">
+            <input type="hidden" name="Id" value="">
+            <div class="form-group">
+                <label for="input1">Title</label>
+                <input type="text" class="form-control" id="input1" placeholder="Title" name="Title">
+            </div>
+            <div class="form-group">
+                <label for="input2">Description</label>
+                <input type="text" class="form-control" id="input2" placeholder="Description" name="Description">
+            </div>
+            <hr>
+            <button type="button" onclick="ticket.update()" class="btn btn-primary">Submit</button>
+            <button type="reset" class="btn btn-secondary">Reset</button>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Num</th>
+                <th scope="col">Title</th>
+                <th scope="col">Description</th>
+                <th scope="col">Parent</th>
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody id="tableBody">
+            <!-- Data rows will be inserted here -->
+            </tbody>
+        </table>
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                <li class="page-item">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true" onclick="ticket.getList(parseInt($('#pageNumber').text())-1)">Previous</a>
+                </li>
+                <!-- Pagination links will be inserted here -->
+                <li class="page-item disabled">
+                    <span class="page-link"  id="pageNumber" >1</span>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#" onclick="ticket.getList(parseInt($('#pageNumber').text())+1)">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
